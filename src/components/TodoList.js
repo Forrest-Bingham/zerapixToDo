@@ -4,37 +4,35 @@ import TodoForm from './TodoForm'
 import Axios from 'axios';
 
 function TodoList() {
-    const [todos,setTodos] = useState([]);
+    const [todos,setTodos] = useState([{id:999999,title:"Click to toggle for completion",completed:false}]);
 
     const getApiToDo = () => {
         Axios.get("https://jsonplaceholder.typicode.com/todos")
         .then((response) => {
-          console.log(response);
           var random1 = Math.floor(Math.random()*199);
-          var random2 = Math.floor(Math.random()*199);
-          var random3 = Math.floor(Math.random()*199);
-          console.log(random1,random2,random3);
+        //   var random2 = Math.floor(Math.random()*199);
+        //   var random3 = Math.floor(Math.random()*199);
           var task1 = response.data[random1];
-          var task2 = response.data[random2];
-          var task3 = response.data[random3];
-          console.log(task1,task2,task3);
+        //   var task2 = response.data[random2];
+        //   var task3 = response.data[random3];
           const newTodo1={
             id:task1.id,
             title:task1.title,
             completed:task1.completed
           }
-          const newTodo2={
-            id:task2.id,
-            title:task2.title,
-            completed:task2.completed
-          }
-          const newTodo3={
-            id:task3.id,
-            title:task3.title,
-            completed:task3.completed
-          }
+          const newApiTodos = [newTodo1, ...todos]
+        //   const newTodo2={
+        //     id:task2.id,
+        //     title:task2.title,
+        //     completed:task2.completed
+        //   }
+        //   const newTodo3={
+        //     id:task3.id,
+        //     title:task3.title,
+        //     completed:task3.completed
+        //   }
 
-          const newApiTodos = [newTodo1, newTodo2, newTodo3, ...todos]
+        //   const newApiTodos = [newTodo1, newTodo2, newTodo3, ...todos]
           setTodos(newApiTodos);
 
         })
@@ -44,26 +42,22 @@ function TodoList() {
       }
 
     const addTodo = todo => {
-        console.log('Adding to do');
+        //Checks for empty spaces and large spaces between letters
         if(!todo.title || /^\s*$/.test(todo.title)){
             return;
         }
-
         const newTodos = [todo, ...todos]
-        console.log(newTodos);
         setTodos(newTodos);
         
     }
 
     const editTodo = (taskId, newValue) => {
-        console.log(taskId,newValue);
         if(!newValue.title || /^\s*$/.test(newValue.title)){
             return;
         }
-
+        //Finds the task whose id we are using and changes title if there is a change
         setTodos(previous => previous.map(task => (task.id === taskId ? newValue : task))
         )
-        console.log(setTodos);
     }
 
     const deleteTodo = id => {
@@ -74,6 +68,7 @@ function TodoList() {
     }
 
     const completeTodo = id => {
+        //Map through and toggle the todo who was clicked
         let updatedTodos = todos.map(todo => {
             if(todo.id === id){
                 todo.completed = !todo.completed
@@ -85,15 +80,21 @@ function TodoList() {
 
   return (
     <div>
-      <h1>What are we doing today?</h1>
-      <button onClick={getApiToDo}>Get Tasks</button>
-      <TodoForm onSubmit={addTodo}/>
-      <Todo 
-        todos={todos}
-        completeTodo={completeTodo}
-        editTodo={editTodo}
-        deleteTodo={deleteTodo}
-      />
+        <div className="listHeader">
+            <h1>Welcome to your Task Manager</h1>
+        </div>
+        <div className="getApiTodo">
+            <button className="apiButton" onClick={getApiToDo}>Click to get an API Task</button>
+        </div>
+        <div className="toDoFormArea">
+            <TodoForm onSubmit={addTodo}/>
+            <Todo 
+                todos={todos}
+                completeTodo={completeTodo}
+                editTodo={editTodo}
+                deleteTodo={deleteTodo}
+            />
+        </div>
     </div>
   )
 }

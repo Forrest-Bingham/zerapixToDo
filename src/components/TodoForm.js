@@ -48,14 +48,14 @@ const handleSubmit = e => {
             <>
             <input 
                 type="text" 
-                placeholder="Add a task" 
+                placeholder=" Add a task" 
                 value={input} 
                 name="title" 
                 className="todoFormInput"
                 onChange={handleChange}
                 ref={inputFocus}
             />
-            <button className="todoFormButton">Add a Task</button>
+            <button className="todoFormButton">Add Task</button>
             </>
             )} 
 
